@@ -1,0 +1,25 @@
+schema-version: v2.2
+dd-service: curryware-java
+team: curryware-team
+application: curryware-ff
+tier: "1"
+type: web
+lifecycle: "production"
+languages:
+  - java
+contacts:
+  - type: slack
+    contact: https://currywareinc.slack.com/archives/C0754T081EW
+  - type: email
+    contact: scurry@curryware.org
+links:
+  - name: Source
+    type: repo
+    provider: github
+    url: https://github.com/scotcurry/curryware-java
+  - name: Documentation
+    type: doc
+    url: https://github.com/scotcurry/front-end/blob/master/README.md
+  - name: Jira Page
+    type: code
+    url: https://curryware.atlassian.net/jira/software/c/projects/CJ/issues?jql=project%20%3D%20%22CJ%22%20ORDER%20BY%20created%20DESC
