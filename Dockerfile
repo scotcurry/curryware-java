@@ -1,5 +1,6 @@
+ARG BUILD_VERSION=1
 FROM eclipse-temurin:17-jdk
-ADD build/libs/curryware-java-1.2.3.jar app.jar
+ADD build/libs/curryware-java-${BUILD_VERSION}.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
