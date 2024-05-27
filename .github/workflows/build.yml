@@ -1,0 +1,85 @@
+name: Build JAR file
+on: [push]
+jobs:
+  build-jar-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get-Source
+        uses: actions/checkout@v4
+      - name: Setup JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17.0.8'
+          cache: 'gradle'
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+      - name: Build with Gradle
+        run: ./gradlew -PprojVersion=${{ github.run_number }} build
+      - name: Run Tests with Gradle
+        run: ./gradlew test --tests FantasyTeamControllerTest
+
+      - name: Check imported libraries are secure and compliant
+        id: datadog-software-composition-analysis
+        uses: DataDog/datadog-sca-github-action@main
+        with:
+          dd_api_key: ${{ secrets.DD_API_KEY }}
+          dd_app_key: ${{ secrets.DD_APP_KEY }}
+          dd_env: ci
+          dd_service: curryware-java
+          dd_site: datadoghq.com
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and Push Docker Container
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64, linux/arm64/v8
+          push: true
+          tags: scotcurry4/curryware-java:${{ github.run_number }}
+          labels: |
+            org.opencontainers.image.source=github.com/scotcurry/curryware-java
+            org.opencontainers.image.revision=${{ github.sha }}
+            tags.datadoghq.com/env=prod
+            tags.datadoghq.com/version=${{ github.run_number }}
+            tags.datadoghq.com/service=curryware-java
+
+      - name: Add Service Catalog Information
+        uses: arcxp/datadog-service-catalog-metadata-provider@v2
+        with:
+          schema-version: v2.2
+          datadog-hostname: https://api.datadoghq.com
+          datadog-key: ${{ secrets.DD_API_KEY }}
+          datadog-app-key: ${{ secrets.DD_APP_KEY }}
+          service-name: curryware-java
+          team: curryware-team
+          description: "Currently supports hard-coded selection of the fantasy team by year"
+          application: curryware-ff
+          type: function
+          languages: java
+          tier: "1"
+          email: scotcurry4@gmail.com
+          slack-support-channel: https://currywareinc.slack.com/archives/C0754T081EW
+          repos: |
+            - name: curryware-java
+              url: https://github.com/scotcurry/curryware-java
+              provider: github
+          docs: |
+            - name: confluence-page
+              url: https://curryware.atlassian.net/wiki/spaces/CUR/pages/72483147/curryware-java
+              provider: Confluence
+          links: |
+            - name: jira-page
+              url: https://curryware.atlassian.net/jira/software/c/projects/CJ/issues?jql=project%20%3D%20%22CJ%22%20ORDER%20BY%20created%20DESC
+              type: code
