@@ -56,32 +56,3 @@ jobs:
             tags.datadoghq.com/env=prod
             tags.datadoghq.com/version=${{ github.run_number }}
             tags.datadoghq.com/service=curryware-java
-
-      - name: Add Service Catalog Information
-        uses: arcxp/datadog-service-catalog-metadata-provider@v2
-        with:
-          schema-version: v2.2
-          datadog-hostname: https://api.datadoghq.com
-          datadog-key: ${{ secrets.DD_API_KEY }}
-          datadog-app-key: ${{ secrets.DD_APP_KEY }}
-          service-name: curryware-java
-          team: curryware-team
-          description: "Currently supports hard-coded selection of the fantasy team by year"
-          application: curryware-ff
-          type: function
-          languages: java
-          tier: "1"
-          email: scotcurry4@gmail.com
-          slack-support-channel: https://currywareinc.slack.com/archives/C0754T081EW
-          repos: |
-            - name: curryware-java
-              url: https://github.com/scotcurry/curryware-java
-              provider: github
-          docs: |
-            - name: confluence-page
-              url: https://curryware.atlassian.net/wiki/spaces/CUR/pages/72483147/curryware-java
-              provider: Confluence
-          links: |
-            - name: jira-page
-              url: https://curryware.atlassian.net/jira/software/c/projects/CJ/issues?jql=project%20%3D%20%22CJ%22%20ORDER%20BY%20created%20DESC
-              type: code
