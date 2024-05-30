@@ -27,12 +27,14 @@ public class FantasyTeamController {
     @GetMapping(value = "/getteams", produces = "application/json")
     public @ResponseBody String getTeamInfo() {
 
+        String jsonString;
         logger.info("Getting team information");
         Iterable<TeamInfo> teamInfoList = teamInfoService.findAll();
         List<TeamInfo> teamInfo = new ArrayList<>();
         teamInfoList.forEach(teamInfo::add);
         logger.info("Found {} teams", teamInfo.size());
+        jsonString = new Gson().toJson(teamInfo);
 
-        return new Gson().toJson(teamInfo);
+        return jsonString;
     }
 }
