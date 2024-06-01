@@ -1,8 +1,8 @@
 package org.curryware.currywarejava.controller;
 
 import com.google.gson.Gson;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.curryware.currywarejava.models.TeamInfo;
 import org.curryware.currywarejava.services.TeamInfoService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping("teaminfo")
 public class FantasyTeamController {
 
-    private static final Logger logger = LogManager.getLogger(FantasyTeamController.class);
+    private static final Logger logger = LoggerFactory.getLogger(FantasyTeamController.class);
     private final TeamInfoService teamInfoService;
 
     public FantasyTeamController(TeamInfoService teamInfoService) {
@@ -27,13 +27,13 @@ public class FantasyTeamController {
     @GetMapping(value = "/getteams", produces = "application/json")
     public @ResponseBody String getTeamInfo() {
 
-        String jsonString;
         logger.info("Getting team information");
         Iterable<TeamInfo> teamInfoList = teamInfoService.findAll();
         List<TeamInfo> teamInfo = new ArrayList<>();
         teamInfoList.forEach(teamInfo::add);
-        logger.info("Found {} teams", teamInfo.size());
-        jsonString = new Gson().toJson(teamInfo);
+        logger.error("Found {} teams", teamInfo.size());
+        String jsonString = new Gson().toJson(teamInfo);
+        teamInfo.clear();
 
         return jsonString;
     }
