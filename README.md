@@ -21,3 +21,6 @@ if (project.hasProperty('projVersion')) {
 ```
 ./gradlew bootRun
 ```
+
+## Logging Configuration
+Spring uses logback by default.  Set options in the /src/main/resources/logback-spring.xml file.
