@@ -23,3 +23,5 @@ links:
   - name: Jira Page
     type: code
     url: https://curryware.atlassian.net/jira/software/c/projects/CJ/issues?jql=project%20%3D%20%22CJ%22%20ORDER%20BY%20created%20DESC
+ci-pipeline-fingerprints:
+  - ADqrMHuB3Zvt

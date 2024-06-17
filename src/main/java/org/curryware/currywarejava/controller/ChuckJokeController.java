@@ -18,6 +18,16 @@ public class ChuckJokeController {
         return "{\"joke\": \"" + getJokeText() + "\"}";
     }
 
+    @GetMapping(value = "/throw_java_error")
+    public @ResponseBody String throwJavaError() {
+
+        int otis = 1;
+        otis = otis - 1;
+        int scot = 1 / otis ;
+
+        return String.valueOf(otis);
+    }
+
     private String getJokeText() {
 
         int randomNumber = ThreadLocalRandom.current().nextInt(1, 4);
